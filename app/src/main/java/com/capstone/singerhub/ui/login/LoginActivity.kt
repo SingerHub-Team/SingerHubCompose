@@ -1,7 +1,6 @@
 package com.capstone.singerhub.ui.login
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -40,6 +41,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -59,6 +61,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.capstone.singerhub.R
 import com.capstone.singerhub.ui.theme.Coral
 import com.capstone.singerhub.ui.theme.DarkBrown
@@ -69,16 +72,33 @@ import com.capstone.singerhub.utils.Template
 import com.capstone.singerhub.utils.Template.InfoText
 import com.capstone.singerhub.utils.Template.TextClick
 import com.capstone.singerhub.utils.Template.Title
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             SingerHubTheme {
+                val systemUiController = rememberSystemUiController()
+                systemUiController.setSystemBarsColor(
+                    color = Color.Transparent
+                )
+                systemUiController.setStatusBarColor(
+                    color = Color.Transparent
+                )
+                SideEffect {
+                    systemUiController.setSystemBarsColor(
+                        color = Color.Transparent
+                    )
+                    systemUiController.setStatusBarColor(
+                        color = Color.Transparent
+                    )
+                }
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = SolidCream
                 ) {
                     LoginMain(LocalContext.current)
                 }
@@ -160,8 +180,9 @@ fun LoginContent(modifier: Modifier, context: Context) {
                 contentDescription = "background_pattern",
                 modifier = Modifier
                     .fillMaxHeight()
-                    .fillMaxWidth(),
-                contentScale = ContentScale.Fit
+                    .fillMaxWidth()
+                    .offset(y = 25.dp),
+                contentScale = ContentScale.FillBounds
             )
         }
         Column(
@@ -178,10 +199,14 @@ fun LoginContent(modifier: Modifier, context: Context) {
                 TextField(
                     value = loginInput,
                     onValueChange = { loginInput = it },
-                    label = { Text(text = "E-Mail", ) },
+                    label = { Text(text = "E-Mail") },
                     leadingIcon = { Icon(Icons.Filled.Email, contentDescription = "email_icon") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    textStyle = TextStyle(fontFamily = MontSerrat, fontWeight = FontWeight.Medium, fontSize = 18.sp),
+                    textStyle = TextStyle(
+                        fontFamily = MontSerrat,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 18.sp
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(CircleShape),
@@ -196,12 +221,16 @@ fun LoginContent(modifier: Modifier, context: Context) {
                     leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "email_icon") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    textStyle = TextStyle(fontFamily = MontSerrat, fontWeight = FontWeight.Medium, fontSize = 18.sp),
+                    textStyle = TextStyle(
+                        fontFamily = MontSerrat,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 18.sp
+                    ),
                     trailingIcon = {
                         val image =
                             if (isPasswordVisible) Icons.Filled.Visibility
                             else Icons.Filled.VisibilityOff
-                        IconButton(onClick = {isPasswordVisible = !isPasswordVisible}) {
+                        IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
                             Icon(imageVector = image, contentDescription = null)
                         }
                     },
@@ -212,6 +241,19 @@ fun LoginContent(modifier: Modifier, context: Context) {
                     colors = textFieldColors
                 )
 
+                Button(
+                    onClick = {
+//                        context.startActivity(Intent(context, LoginActivity::class.java))
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = DarkBrown),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 25.dp, bottom = 10.dp)
+                        .height(65.dp),
+                    content = {
+                        Template.ButtonText(text = "Login")
+                    })
+
                 Row(modifier = Modifier.padding(vertical = 10.dp)) {
                     InfoText(text = "No Account?")
                     TextClick(text = "Register Here",
@@ -221,18 +263,6 @@ fun LoginContent(modifier: Modifier, context: Context) {
 
                             })
                 }
-
-                Button(
-                    onClick = {
-//                        context.startActivity(Intent(context, LoginActivity::class.java))
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = DarkBrown),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(65.dp),
-                    content = {
-                        Template.ButtonText(text = "Login")
-                    })
             }
         }
     }

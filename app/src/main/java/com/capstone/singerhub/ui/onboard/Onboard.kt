@@ -6,12 +6,14 @@ import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -53,12 +55,7 @@ class Onboard {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun OnboardMain(context: Context) {
-        val view = LocalView.current
-        if (!view.isInEditMode) {
-            SideEffect {
-                (view.context as Activity).window.statusBarColor = SolidCream.toArgb()
-            }
-        }
+        Column(modifier = Modifier.height(300.dp).fillMaxWidth().offset(y = (-100).dp)){}
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
@@ -91,7 +88,6 @@ class Onboard {
                 .background(SolidCream)
                 .fillMaxHeight()
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.padding(30.dp)) {
                 Title(text = "Connecting\nSingers\nAll Around")
