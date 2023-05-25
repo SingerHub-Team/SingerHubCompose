@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <color android:color="@color/solid_cream" />
+    </item>
+    <item
+        android:width="@dimen/splashscreen_icon_size"
+        android:height="@dimen/splashscreen_icon_size"
+        android:drawable="@drawable/ic_launcher_foreground"
+        android:gravity="center" />
+</layer-list>
