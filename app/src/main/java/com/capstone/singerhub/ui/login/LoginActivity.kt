@@ -1,6 +1,7 @@
 package com.capstone.singerhub.ui.login
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -33,7 +33,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -63,6 +62,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.capstone.singerhub.R
+import com.capstone.singerhub.ui.home.MainActivity
 import com.capstone.singerhub.ui.theme.Coral
 import com.capstone.singerhub.ui.theme.DarkBrown
 import com.capstone.singerhub.ui.theme.MontSerrat
@@ -100,24 +100,15 @@ class LoginActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = SolidCream
                 ) {
-                    LoginMain(LocalContext.current)
+                    LoginMain()
                 }
             }
         }
     }
 }
-
-@Composable
-fun Greeting2(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginMain(context: Context) {
+fun LoginMain() {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -138,7 +129,7 @@ fun LoginMain(context: Context) {
         modifier = Modifier.statusBarsPadding(),
         contentWindowInsets = WindowInsets(top = 0.dp),
         content = {
-            LoginContent(modifier = Modifier.padding(it), context)
+            LoginContent(modifier = Modifier.padding(it), LocalContext.current)
         }
     )
 }
@@ -243,7 +234,7 @@ fun LoginContent(modifier: Modifier, context: Context) {
 
                 Button(
                     onClick = {
-//                        context.startActivity(Intent(context, LoginActivity::class.java))
+                        context.startActivity(Intent(context, MainActivity::class.java))
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = DarkBrown),
                     modifier = Modifier
@@ -272,6 +263,6 @@ fun LoginContent(modifier: Modifier, context: Context) {
 @Composable
 fun GreetingPreview2() {
     SingerHubTheme {
-        LoginMain(LocalContext.current)
+        LoginMain()
     }
 }
