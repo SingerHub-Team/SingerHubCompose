@@ -1,5 +1,6 @@
 package com.capstone.singerhub.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -49,6 +50,9 @@ import com.capstone.singerhub.R
 import com.capstone.singerhub.models.officeTemplateGenerator
 import com.capstone.singerhub.models.postTemplateGenerator
 import com.capstone.singerhub.ui.item.ItemHome
+import com.capstone.singerhub.ui.notification.NotificationPage
+import com.capstone.singerhub.ui.profile.ProfilePage
+import com.capstone.singerhub.ui.search.SearchPage
 import com.capstone.singerhub.ui.theme.Coral
 import com.capstone.singerhub.ui.theme.DarkItem
 import com.capstone.singerhub.ui.theme.MontSerrat
@@ -57,6 +61,11 @@ import com.capstone.singerhub.ui.theme.SolidCream
 import com.capstone.singerhub.ui.theme.WhiteNotWhite
 import com.capstone.singerhub.utils.BottomNavItem
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
+val _page = MutableStateFlow(1)
+val page = _page.asStateFlow()
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,6 +123,7 @@ fun HomeScreen(context: Context, modifier: Modifier = Modifier) {
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(context: Context) {
@@ -160,13 +170,13 @@ fun MainNavGraph(
             HomeScreen(context = context)
         }
         composable(BottomNavItem.Search.route) {
-            HomeScreen(context = context)
+            SearchPage().GetSearchPage()
         }
         composable(BottomNavItem.Notification.route) {
-            HomeScreen(context = context)
+            NotificationPage().GetNotificationPage()
         }
         composable(BottomNavItem.Profile.route) {
-            HomeScreen(context = context)
+            ProfilePage().GetProfilePage()
         }
     }
 }
@@ -188,7 +198,7 @@ fun TopBar() {
                     .height(32.dp)
             )
             Text(
-                text = "Recommended Gigs",
+                text = stringResource(id = R.string.app_name),
                 fontFamily = MontSerrat,
                 fontWeight = FontWeight.Bold,
                 color = Coral,
