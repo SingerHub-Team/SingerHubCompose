@@ -1,5 +1,9 @@
 package com.capstone.singerhub.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class PostModel(
     val id: Int,
     val position: String,
@@ -10,4 +14,4 @@ data class PostModel(
     val salaryPer: String,
     val posted: String,
     val backgroundImage: String?,
-)
+) : Parcelable

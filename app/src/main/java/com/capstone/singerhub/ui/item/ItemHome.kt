@@ -1,6 +1,7 @@
 package com.capstone.singerhub.ui.item
 
 import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,9 +45,12 @@ import com.capstone.singerhub.models.OfficeModel
 import com.capstone.singerhub.models.PostModel
 import com.capstone.singerhub.models.officeTemplate
 import com.capstone.singerhub.models.postTemplate
+import com.capstone.singerhub.ui.detail.DetailPositionActivity
 import com.capstone.singerhub.ui.theme.Coral
 import com.capstone.singerhub.ui.theme.MontSerrat
 import com.capstone.singerhub.ui.theme.SingerHubTheme
+import com.capstone.singerhub.utils.Constants.OFFICE_DETAIL
+import com.capstone.singerhub.utils.Constants.POST_DETAIL
 import java.text.DecimalFormat
 
 class ItemHome {
@@ -68,7 +72,12 @@ class ItemHome {
             modifier = modifier
                 .fillMaxWidth()
                 .height(230.dp)
-                .clickable { /*TODO*/ }
+                .clickable {
+                    val intent = Intent(context, DetailPositionActivity::class.java)
+                    intent.putExtra(POST_DETAIL, postModel)
+                    intent.putExtra(OFFICE_DETAIL, officeModel)
+                    context.startActivity(intent)
+                }
                 .padding(vertical = 5.dp, horizontal = 10.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color.White
@@ -209,7 +218,6 @@ class ItemHome {
             fontWeight = FontWeight.SemiBold
         )
     }
-
 
     @Composable
     fun TextPostedItem(text: String, modifier: Modifier = Modifier) {
