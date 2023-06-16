@@ -3,15 +3,18 @@ package com.capstone.singerhub.ui.onboard
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -52,13 +55,8 @@ import com.capstone.singerhub.utils.Template.Title
 class Onboard {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun OnboardMain(context: Context) {
-        val view = LocalView.current
-        if (!view.isInEditMode) {
-            SideEffect {
-                (view.context as Activity).window.statusBarColor = SolidCream.toArgb()
-            }
-        }
+    fun OnboardMain(context: Context, activity: ComponentActivity) {
+        Column(modifier = Modifier.height(300.dp).fillMaxWidth().offset(y = (-100).dp)){}
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
@@ -79,19 +77,18 @@ class Onboard {
             modifier = Modifier.statusBarsPadding(),
             contentWindowInsets = WindowInsets(top = 0.dp),
             content = {
-                OnboardContent(Modifier.padding(it), context)
+                OnboardContent(Modifier.padding(it), context, activity)
             }
         )
     }
 
     @Composable
-    fun OnboardContent(modifier: Modifier, context: Context) {
+    fun OnboardContent(modifier: Modifier, context: Context, activity: ComponentActivity) {
         Column(
             modifier = modifier
                 .background(SolidCream)
                 .fillMaxHeight()
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.padding(30.dp)) {
                 Title(text = "Connecting\nSingers\nAll Around")
@@ -111,7 +108,8 @@ class Onboard {
             Column {
                 Button(
                     onClick = {
-                              context.startActivity(Intent(context, LoginActivity::class.java))
+                        activity.finish()
+                        context.startActivity(Intent(context, LoginActivity::class.java))
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = DarkBrown),
                     modifier = Modifier
@@ -138,14 +136,6 @@ class Onboard {
     fun PreviewSubtitle() {
         SingerHubTheme {
             Subtitle(text = "SingerHub")
-        }
-    }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun PreviewOnboard() {
-        SingerHubTheme {
-            OnboardMain(LocalContext.current)
         }
     }
 }
