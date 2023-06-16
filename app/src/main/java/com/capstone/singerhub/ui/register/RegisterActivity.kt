@@ -1,14 +1,13 @@
-package com.capstone.singerhub.ui.login
+package com.capstone.singerhub.ui.register
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +25,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
@@ -35,6 +35,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -42,7 +43,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -61,49 +62,26 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import com.capstone.singerhub.R
-import com.capstone.singerhub.ui.home.MainActivity
-import com.capstone.singerhub.ui.register.RegisterActivity
 import com.capstone.singerhub.ui.theme.Coral
 import com.capstone.singerhub.ui.theme.DarkBrown
 import com.capstone.singerhub.ui.theme.MontSerrat
 import com.capstone.singerhub.ui.theme.SingerHubTheme
 import com.capstone.singerhub.ui.theme.SolidCream
 import com.capstone.singerhub.utils.Template
-import com.capstone.singerhub.utils.Template.InfoText
-import com.capstone.singerhub.utils.Template.TextClick
-import com.capstone.singerhub.utils.Template.Title
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-class LoginActivity : ComponentActivity() {
+class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             SingerHubTheme {
-                val systemUiController = rememberSystemUiController()
-                systemUiController.setSystemBarsColor(
-                    color = Color.Transparent
-                )
-                systemUiController.setStatusBarColor(
-                    color = Color.Transparent
-                )
-                SideEffect {
-                    systemUiController.setSystemBarsColor(
-                        color = Color.Transparent
-                    )
-                    systemUiController.setStatusBarColor(
-                        color = Color.Transparent
-                    )
-                }
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = SolidCream
+                    color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginMain(this)
+                    RegisterMain(this)
                 }
             }
         }
@@ -112,7 +90,7 @@ class LoginActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginMain(activity: ComponentActivity) {
+fun RegisterMain(activity: ComponentActivity) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -133,15 +111,19 @@ fun LoginMain(activity: ComponentActivity) {
         modifier = Modifier.statusBarsPadding(),
         contentWindowInsets = WindowInsets(top = 0.dp),
         content = {
-            LoginContent(modifier = Modifier.padding(it), LocalContext.current, activity)
+            RegisterContent(modifier = Modifier.padding(it), LocalContext.current, activity)
         }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginContent(modifier: Modifier, context: Context, activity: ComponentActivity) {
+fun RegisterContent(modifier: Modifier, context: Context, activity: ComponentActivity) {
+    val vm = ViewModelProvider(activity)[RegisterViewModel::class.java]
     var loginInput by rememberSaveable {
+        mutableStateOf("")
+    }
+    var nameInput by rememberSaveable {
         mutableStateOf("")
     }
     var passwordInput by rememberSaveable {
@@ -153,7 +135,6 @@ fun LoginContent(modifier: Modifier, context: Context, activity: ComponentActivi
     var isLoggingIn by rememberSaveable {
         mutableStateOf(false)
     }
-    val vm = ViewModelProvider(activity)[LoginViewModel::class.java]
     val textFieldColors = TextFieldDefaults.textFieldColors(
         containerColor = Color.White,
         textColor = Color.Black,
@@ -191,8 +172,28 @@ fun LoginContent(modifier: Modifier, context: Context, activity: ComponentActivi
                 .padding(20.dp),
 //            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Title("Login to\nSingerHub", modifier = Modifier.padding(top = 150.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                Template.Title("Register", modifier = Modifier.padding(top = 94.dp))
+            }
             Column(modifier = Modifier.padding(top = 50.dp)) {
+
+                // Name TextField
+                TextField(
+                    value = nameInput,
+                    onValueChange = { nameInput = it },
+                    label = { Text(text = "Full Name") },
+                    leadingIcon = { Icon(Icons.Filled.Person, contentDescription = "icon") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    textStyle = TextStyle(
+                        fontFamily = MontSerrat,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 18.sp
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(CircleShape),
+                    colors = textFieldColors
+                )
 
                 // E-Mail TextField
                 TextField(
@@ -208,6 +209,7 @@ fun LoginContent(modifier: Modifier, context: Context, activity: ComponentActivi
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(top = 20.dp)
                         .clip(CircleShape),
                     colors = textFieldColors
                 )
@@ -242,18 +244,22 @@ fun LoginContent(modifier: Modifier, context: Context, activity: ComponentActivi
                 Button(
                     onClick = {
                         isLoggingIn = true
-                        if (loginInput.isNotEmpty() && passwordInput.isNotEmpty()) {
-                            val login = vm.login(loginInput, passwordInput)
-                            login.observe(activity) {
-                                isLoggingIn = false
-                                if (it.message == "Login berhasil") {
-                                    context.startActivity(Intent(context, MainActivity::class.java))
-                                }
-                                Toast.makeText(context, it.message, Toast.LENGTH_SHORT)
+                        if (loginInput.isNotEmpty() && passwordInput.isNotEmpty() && nameInput.isNotEmpty()) {
+                            val reg = vm.register(loginInput, passwordInput, nameInput)
+                            reg.observe(activity) {
+                                Toast.makeText(context, it.message, Toast.LENGTH_LONG)
                                     .show()
+                                isLoggingIn = false
+                                if (it.message == "Pengguna berhasil didaftarkan") {
+                                    activity.onBackPressed()
+                                }
                             }
                         } else {
-                            Toast.makeText(context, "Isi data terlebih dahulu", Toast.LENGTH_LONG)
+                            Toast.makeText(
+                                context,
+                                "Isi data terlebih dahulu",
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                             isLoggingIn = false
                         }
@@ -265,20 +271,10 @@ fun LoginContent(modifier: Modifier, context: Context, activity: ComponentActivi
                         .height(65.dp),
                     content = {
                         if (!isLoggingIn)
-                            Template.ButtonText(text = "Login")
+                            Template.ButtonText(text = "Register")
                         else
                             CircularProgressIndicator(color = Coral)
                     })
-
-                Row(modifier = Modifier.padding(vertical = 10.dp)) {
-                    InfoText(text = "No Account?")
-                    TextClick(text = "Register Here",
-                        Modifier
-                            .padding(start = 10.dp)
-                            .clickable {
-                                context.startActivity(Intent(context, RegisterActivity::class.java))
-                            })
-                }
             }
         }
     }

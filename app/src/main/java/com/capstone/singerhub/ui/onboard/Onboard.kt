@@ -3,6 +3,7 @@ package com.capstone.singerhub.ui.onboard
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -54,7 +55,7 @@ import com.capstone.singerhub.utils.Template.Title
 class Onboard {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun OnboardMain(context: Context) {
+    fun OnboardMain(context: Context, activity: ComponentActivity) {
         Column(modifier = Modifier.height(300.dp).fillMaxWidth().offset(y = (-100).dp)){}
         Scaffold(
             topBar = {
@@ -76,13 +77,13 @@ class Onboard {
             modifier = Modifier.statusBarsPadding(),
             contentWindowInsets = WindowInsets(top = 0.dp),
             content = {
-                OnboardContent(Modifier.padding(it), context)
+                OnboardContent(Modifier.padding(it), context, activity)
             }
         )
     }
 
     @Composable
-    fun OnboardContent(modifier: Modifier, context: Context) {
+    fun OnboardContent(modifier: Modifier, context: Context, activity: ComponentActivity) {
         Column(
             modifier = modifier
                 .background(SolidCream)
@@ -107,7 +108,8 @@ class Onboard {
             Column {
                 Button(
                     onClick = {
-                              context.startActivity(Intent(context, LoginActivity::class.java))
+                        activity.finish()
+                        context.startActivity(Intent(context, LoginActivity::class.java))
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = DarkBrown),
                     modifier = Modifier
@@ -134,14 +136,6 @@ class Onboard {
     fun PreviewSubtitle() {
         SingerHubTheme {
             Subtitle(text = "SingerHub")
-        }
-    }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun PreviewOnboard() {
-        SingerHubTheme {
-            OnboardMain(LocalContext.current)
         }
     }
 }

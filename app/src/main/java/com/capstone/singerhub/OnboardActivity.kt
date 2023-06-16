@@ -28,17 +28,9 @@ class OnboardActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = SolidCream
                 ) {
-                    Onboard().OnboardMain(LocalContext.current)
+                    Onboard().OnboardMain(LocalContext.current, this)
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SingerHubTheme {
-        Onboard().OnboardMain(LocalContext.current)
     }
 }

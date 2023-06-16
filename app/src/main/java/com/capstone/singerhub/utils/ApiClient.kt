@@ -1,14 +1,17 @@
 package com.capstone.singerhub.utils
 
 import com.capstone.singerhub.models.GetUserDataResponse
+import com.capstone.singerhub.models.LoginModel
 import com.capstone.singerhub.models.LoginResponse
 import com.capstone.singerhub.models.LogoutResponse
+import com.capstone.singerhub.models.RegisterModel
 import com.capstone.singerhub.models.RegisterResponse
 import com.capstone.singerhub.utils.Constants.BASE_URL
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -31,44 +34,36 @@ class ApiClient {
 }
 
 interface ApiInterface {
-    @FormUrlEncoded
     @POST("login")
-    fun login(
-        @Field("email")
-        email: String,
-        @Field("password")
-        password: String,
-    ): Call<LoginResponse>
+    suspend fun login(
+        @Body
+        loginModel: LoginModel
+    ): LoginResponse
 
     @FormUrlEncoded
     @POST("logout")
-    fun logout(
+    suspend fun logout(
         @Field("uid")
         uid: String,
-    ): Call<LogoutResponse>
+    ): LogoutResponse
 
-    @FormUrlEncoded
-    @POST("register")
-    fun register(
-        @Field("email")
-        email: String,
-        @Field("password")
-        password: String,
-        @Field("nama_lengkap")
-        name: String
-    ): Call<RegisterResponse>
+    @POST("register-account")
+    suspend fun register(
+        @Body
+        registerModel: RegisterModel
+    ): RegisterResponse
 
     @FormUrlEncoded
     @GET("get-user-data")
-    fun getUserData(
+    suspend fun getUserData(
         @Query("id")
         id: String
-    ): Call<GetUserDataResponse>
+    ): GetUserDataResponse
 
     @FormUrlEncoded
     @GET("get-user-data")
-    fun getUserDataWithUID(
+    suspend fun getUserDataWithUID(
         @Query("uid")
         uid: String
-    ): Call<GetUserDataResponse>
+    ): GetUserDataResponse
 }
